@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:xn-eu-edm="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-eu-edm"
+           xmlns:xn-bdt="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-basisdatentypen"
+           xmlns:xn-bk="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-baukasten"
+           targetNamespace="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-eu-edm"
+           version="1.2.0"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+   <xs:annotation>
+      <xs:appinfo>
+         <standard>
+            <nameLang>XNachweis</nameLang>
+            <nameKurz>XNachweis</nameKurz>
+            <nameTechnisch>xnachweis</nameTechnisch>
+            <kennung>urn:xoev-de:bva:standard:xnachweis</kennung>
+            <beschreibung>XNachweis ist ein Standard des Bundesverwaltungsamtes (BVA) für die fachunabhängige Anforderung und Übermittlung von Nachweisen zu Personen und Unternehmen. Mittels XNachweis werden nationale Verwaltungsportale, registerführende wie auch weitere öffentlichen Stellen an das nationale (NOOTS) und das europäischen Once Only Technical System (SDG-OOTS) angebunden. 
+
+Der Standard ist interoperabel mit den europäischen Spezifikationen (EU-Technical Design Documents, kurz EU-TDD) der Verordnung (EU) 2018/1724 des Europäischen Parlaments und des Rates (SDG-VO) und gleichzeitig ausgerichtet auf die spezifischen Anforderungen eines nationalen OOTS. Der Standard XNachweis wird durch das BVA herausgegeben und im Auftrag des BVA durch die KoSIT betrieben.
+</beschreibung>
+         </standard>
+         <versionStandard>
+            <version>1.2.0</version>
+            <beschreibung>Mit der vorliegenden Version 1.2.0 wird eine neue Nachrichtengruppe zur Umsetzung des Nachweisabrufs von nationalen Onlinediensten aus nationalen Registern im NOOTS bereitgestellt. Im Rahmen der Umsetzung wurde vorrangig der Nachweisabruf zu natürlichen Personen ausgearbeitet. Hierzu wurde die Möglichkeit zur Übermittlung der IDNr und eines von der Vermittlungsstelle ausgestellten, zum Abruf berechtigenden Tokens in der Nachricht zur Nachweisanfrage umgesetzt. Des Weiteren wurden geringfügige Verbesserungen an bestehenden Inhalten aller Nachrichtengruppen vorgenommen, darunter zum Beispiel die Änderung des Geburtsorts zur Identifikation einer Person von einer Pflichtangabe zu einer optionalen Angabe sowie die Ausgestaltung der Fehlernachrichten. Die kommenden Versionen werden weitere nationale Anforderungen umsetzen, wie die benötigten Angaben für die Protokollierung eines Nachweisabrufs im Datenschutzcockpit oder die nationale Identifikation von Unternehmen mithilfe der bundeseinheitlichen Wirtschaftsnummer. Begleitend zur Veröffentlichung dieser Version soll eine entsprechende Konfiguration des Prüftools bereitgestellt werden.</beschreibung>
+            <versionXOEVProfil>3.0.1</versionXOEVProfil>
+            <versionXOEVHandbuch>3.0.1</versionXOEVHandbuch>
+            <versionXGenerator>3.1.1</versionXGenerator>
+            <versionModellierungswerkzeug>19.0 SP 4</versionModellierungswerkzeug>
+            <nameModellierungswerkzeug>MagicDraw</nameModellierungswerkzeug>
+         </versionStandard>
+      </xs:appinfo>
+   </xs:annotation>
+   <xs:import schemaLocation="xnachweis-basisdatentypen.xsd"
+              namespace="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-basisdatentypen"/>
+   <xs:import schemaLocation="xnachweis-baukasten.xsd"
+              namespace="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-baukasten"/>
+   <xs:complexType name="AgentType" abstract="true">
+      <xs:annotation>
+         <xs:documentation>The Agent or organisation that is requesting or providing the evidence, or that is providing the Error Response.</xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:extension base="xn-bk:Agent.IdentificationType">
+            <xs:sequence>
+               <xs:element name="Address" minOccurs="0" type="xn-bk:AddressType">
+                  <xs:annotation>
+                     <xs:documentation>A location of the Evidence Requester in the form of an address.</xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+               <xs:element name="Classification" type="xn-bdt:Code.AgentClassification">
+                  <xs:annotation>
+                     <xs:documentation>A code to classify the agents associated to the communication. In case there are multiple agents the codes must be used to distinguish between the actual Evidence Requester and Intermediary Platforms that are involved in the transaction. Default value in context of QueryRequest/EvidenceRequester: ER (Evidence Requester) Default value in context of a QueryResponse/EvidenceProvider: EP Default value in context of a QueryResponse/ErrorProvider: ERRP</xs:documentation>
+                  </xs:annotation>
+               </xs:element>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="RegistryObjectType" abstract="true">
+      <xs:annotation>
+         <xs:documentation>Element to control the type and structure of Registry Object within the QueryResponse.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="id" type="xn-bdt:UUID.URN">
+            <xs:annotation>
+               <xs:documentation>Unique UUID for each RegistryObject. This value is defined by the Evidence Provider.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="EvidenceMetadata" type="xn-bk:EvidenceMetadataType">
+            <xs:annotation>
+               <xs:documentation>Element to provide the metadata about an evidence that is provided from the Data Service of an Evidence Provider (EP).</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="RepositoryItemRef"
+                     minOccurs="0"
+                     type="xn-bk:RepositoryItemRef">
+            <xs:annotation>
+               <xs:documentation>The RepositoryItemRef locates the Evidence file within the repository. It provides a precise reference to the repository item provided by the Evidence Provider.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="RequirementType" abstract="true">
+      <xs:annotation>
+         <xs:documentation>A requirement is a named set of information that identifies which evidence types are appropriate for the purposes of a procedure.</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="Identifier" type="xn-bdt:UUID.SR.Requirements">
+            <xs:annotation>
+               <xs:documentation>The identifier for the requirement.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+         <xs:element name="Name" type="xn-bdt:String.Multilingual">
+            <xs:annotation>
+               <xs:documentation>The name of the requirement</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

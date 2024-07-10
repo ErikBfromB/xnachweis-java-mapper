@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:xn-bdt="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-basisdatentypen"
+           xmlns:din91379="urn:xoev-de:kosit:xoev:datentyp:din-91379_2022-08"
+           xmlns:xoev-code="http://xoev.de/schemata/code/1_0"
+           targetNamespace="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-basisdatentypen"
+           version="1.2.0"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+   <xs:annotation>
+      <xs:appinfo>
+         <standard>
+            <nameLang>XNachweis</nameLang>
+            <nameKurz>XNachweis</nameKurz>
+            <nameTechnisch>xnachweis</nameTechnisch>
+            <kennung>urn:xoev-de:bva:standard:xnachweis</kennung>
+            <beschreibung>XNachweis ist ein Standard des Bundesverwaltungsamtes (BVA) für die fachunabhängige Anforderung und Übermittlung von Nachweisen zu Personen und Unternehmen. Mittels XNachweis werden nationale Verwaltungsportale, registerführende wie auch weitere öffentlichen Stellen an das nationale (NOOTS) und das europäischen Once Only Technical System (SDG-OOTS) angebunden. 
+
+Der Standard ist interoperabel mit den europäischen Spezifikationen (EU-Technical Design Documents, kurz EU-TDD) der Verordnung (EU) 2018/1724 des Europäischen Parlaments und des Rates (SDG-VO) und gleichzeitig ausgerichtet auf die spezifischen Anforderungen eines nationalen OOTS. Der Standard XNachweis wird durch das BVA herausgegeben und im Auftrag des BVA durch die KoSIT betrieben.
+</beschreibung>
+         </standard>
+         <versionStandard>
+            <version>1.2.0</version>
+            <beschreibung>Mit der vorliegenden Version 1.2.0 wird eine neue Nachrichtengruppe zur Umsetzung des Nachweisabrufs von nationalen Onlinediensten aus nationalen Registern im NOOTS bereitgestellt. Im Rahmen der Umsetzung wurde vorrangig der Nachweisabruf zu natürlichen Personen ausgearbeitet. Hierzu wurde die Möglichkeit zur Übermittlung der IDNr und eines von der Vermittlungsstelle ausgestellten, zum Abruf berechtigenden Tokens in der Nachricht zur Nachweisanfrage umgesetzt. Des Weiteren wurden geringfügige Verbesserungen an bestehenden Inhalten aller Nachrichtengruppen vorgenommen, darunter zum Beispiel die Änderung des Geburtsorts zur Identifikation einer Person von einer Pflichtangabe zu einer optionalen Angabe sowie die Ausgestaltung der Fehlernachrichten. Die kommenden Versionen werden weitere nationale Anforderungen umsetzen, wie die benötigten Angaben für die Protokollierung eines Nachweisabrufs im Datenschutzcockpit oder die nationale Identifikation von Unternehmen mithilfe der bundeseinheitlichen Wirtschaftsnummer. Begleitend zur Veröffentlichung dieser Version soll eine entsprechende Konfiguration des Prüftools bereitgestellt werden.</beschreibung>
+            <versionXOEVProfil>3.0.1</versionXOEVProfil>
+            <versionXOEVHandbuch>3.0.1</versionXOEVHandbuch>
+            <versionXGenerator>3.1.1</versionXGenerator>
+            <versionModellierungswerkzeug>19.0 SP 4</versionModellierungswerkzeug>
+            <nameModellierungswerkzeug>MagicDraw</nameModellierungswerkzeug>
+         </versionStandard>
+      </xs:appinfo>
+   </xs:annotation>
+   <xs:import schemaLocation="http://xoev.de/schemata/code/1_0/xoev-code.xsd"
+              namespace="http://xoev.de/schemata/code/1_0"/>
+   <xs:import schemaLocation="https://xoev.de/schemata/din/91379/2022-08/din-norm-91379-datatypes.xsd"
+              namespace="urn:xoev-de:kosit:xoev:datentyp:din-91379_2022-08"/>
+   <xs:simpleType name="AnyURI.HTTPS">
+      <xs:restriction base="xs:anyURI">
+         <xs:pattern value="https://.*"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:complexType name="Code.AgentClassification">
+      <xs:annotation>
+         <xs:appinfo>
+            <codeliste>
+               <nameLang>Agent Classification</nameLang>
+               <nameKurz>Agent Classification</nameKurz>
+               <nameTechnisch>AgentClassification</nameTechnisch>
+               <kennung>urn:xoev-de:xnachweis:codeliste:agentclassification</kennung>
+               <beschreibung>Die mit dieser Codeliste beschriebenen Rollen sind im Kontext des EU-OOTS und des NOOTS zu verwenden. Bei dieser Codeliste handelt es sich um eine Nachveröffentlichung der von DIGIT herausgegebenen Codeliste Agent Classification (urn:sr.oots.tech.europa.eu:codelists:agentclassification) zur Unterstützung der Umsetzung des Standards XNachweis.</beschreibung>
+               <herausgebernameLang>Bundesverwaltungsamt</herausgebernameLang>
+               <herausgebernameKurz>BVA</herausgebernameKurz>
+            </codeliste>
+         </xs:appinfo>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:restriction base="xoev-code:Code">
+            <xs:sequence>
+               <xs:element name="code" type="xs:token" form="unqualified"/>
+            </xs:sequence>
+            <xs:attribute name="listURI"
+                          type="xs:anyURI"
+                          use="optional"
+                          fixed="urn:xoev-de:xnachweis:codeliste:agentclassification"/>
+            <xs:attribute name="listVersionID" type="xs:normalizedString" use="required"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="Code.CountryIdentificationCode">
+      <xs:annotation>
+         <xs:appinfo>
+            <codeliste>
+               <nameLang>Country Codes</nameLang>
+               <nameKurz>Country Codes</nameKurz>
+               <nameTechnisch>Country-Codes</nameTechnisch>
+               <kennung>urn:xoev-de:kosit:codeliste:country-codes</kennung>
+               <beschreibung>Die Codeliste basiert auf der Staats- und Gebietssystematik des Statistischen Bundesamtes (DESTATIS) und dem Standard "Country codes" der International Organization for Standardization (ISO). Die vorliegende Liste die"officially assigned codes" (Alpha-2 und Numerisch) der ISO-Liste sowie die "user assigned codes" für Kosovo ("XK") und Unbekannt ("QU"). Kurz- und Langnamen der aufgeführten Einträge wurden, sofern vorhanden, der DESTATIS-Liste entnommen. Zu den nicht in der DESTATIS-Liste geführten Codeeinträgen wurden die zugehörigen Namen der Deutschen Fassung der Norm entnommen. Die Codeliste ist konform zur EN16931-1 und dem darauf basierenden Standard XRechnung sowie zum Standard XBestellung und der zugrundeliegenden Peppol "BIS Order only" Spezifikation.</beschreibung>
+               <herausgebernameLang>Koordinierungsstelle für IT-Standards</herausgebernameLang>
+               <herausgebernameKurz>KoSIT</herausgebernameKurz>
+            </codeliste>
+         </xs:appinfo>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:restriction base="xoev-code:Code">
+            <xs:sequence>
+               <xs:element name="code" type="xs:token" form="unqualified"/>
+            </xs:sequence>
+            <xs:attribute name="listURI"
+                          type="xs:anyURI"
+                          use="optional"
+                          fixed="urn:xoev-de:kosit:codeliste:country-codes"/>
+            <xs:attribute name="listVersionID" type="xs:normalizedString" use="required"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="Code.ErrorCodes_NOOTS">
+      <xs:annotation>
+         <xs:appinfo>
+            <codeliste>
+               <nameLang>National Once-Only Technical System Error Response Codes </nameLang>
+               <nameKurz>NOOTS Error Codes</nameKurz>
+               <nameTechnisch>NOOTSErrorCodes</nameTechnisch>
+               <kennung>urn:xoev-de:xnachweis:codeliste:nootserrorcodes</kennung>
+               <beschreibung>Die mit dieser Codeliste beschriebenen Fehlercodes können für Nachweisabrufe im Nationalen Once-Only Technical System (NOOTS) verwendet werden. Bei dieser Codeliste handelt es sich um eine Eigenentwicklung zur Unterstützung der Umsetzung des Standards XNachweis.</beschreibung>
+               <herausgebernameLang>Bundesverwaltungsamt</herausgebernameLang>
+               <herausgebernameKurz>BVA</herausgebernameKurz>
+            </codeliste>
+         </xs:appinfo>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:restriction base="xoev-code:Code">
+            <xs:sequence>
+               <xs:element name="code" type="xs:token" form="unqualified"/>
+            </xs:sequence>
+            <xs:attribute name="listURI"
+                          type="xs:anyURI"
+                          use="optional"
+                          fixed="urn:xoev-de:xnachweis:codeliste:nootserrorcodes"/>
+            <xs:attribute name="listVersionID" type="xs:normalizedString" use="required"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="Code.IdentifierSchemes">
+      <xs:annotation>
+         <xs:appinfo>
+            <codeliste>
+               <nameLang>eIDAS Legal Person Identifier Schemes</nameLang>
+               <nameKurz>Identifier Schemes</nameKurz>
+               <nameTechnisch>IdentifierSchemes</nameTechnisch>
+               <kennung>urn:xoev-de:xnachweis:codeliste:identifierschemes</kennung>
+               <beschreibung>Die mit dieser Codeliste beschriebenen eIDAS Legal Person Identifier Schemes sind im Kontext des SDG-OOTS und des NOOTS zu verwenden. Bei dieser Codeliste handelt es sich um eine Nachveröffentlichung der von DIGIT herausgegebenen Codeliste Agent Classification (urn:sr.oots.tech.europa.eu:codelists:identifierschemes) zur Unterstützung der Umsetzung des Standards XNachweis.</beschreibung>
+               <herausgebernameLang>Bundesverwaltungsamt</herausgebernameLang>
+               <herausgebernameKurz>BVA</herausgebernameKurz>
+            </codeliste>
+         </xs:appinfo>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:restriction base="xoev-code:Code">
+            <xs:sequence>
+               <xs:element name="code" type="xs:token" form="unqualified"/>
+            </xs:sequence>
+            <xs:attribute name="listURI"
+                          type="xs:anyURI"
+                          use="optional"
+                          fixed="urn:xoev-de:xnachweis:codeliste:identifierschemes"/>
+            <xs:attribute name="listVersionID" type="xs:normalizedString" use="required"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="Code.LanguageCode">
+      <xs:annotation>
+         <xs:appinfo>
+            <codeliste>
+               <nameLang>Sprachen nach ISO 639-1</nameLang>
+               <nameKurz>ISO 639-1 Sprachen</nameKurz>
+               <nameTechnisch>sprachen-iso-639-1</nameTechnisch>
+               <kennung>urn:xoev-de:xnachweis:codeliste:sprachen-iso-639-1</kennung>
+               <beschreibung>Die mit dieser Codeliste beschriebenen Sprachen sind im Kontext des SDG-OOTS und des NOOTS zu verwenden. Bei dieser Codeliste handelt es sich um eine Nachveröffentlichung der von ISO herausgegebenen Codeliste ISO-639-1 zur Unterstützung der Umsetzung des Standards XNachweis.</beschreibung>
+               <herausgebernameLang>Koordinierungsstelle für IT-Standards</herausgebernameLang>
+               <herausgebernameKurz>KoSIT</herausgebernameKurz>
+            </codeliste>
+         </xs:appinfo>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:restriction base="xoev-code:Code">
+            <xs:sequence>
+               <xs:element name="code" type="xs:token" form="unqualified"/>
+            </xs:sequence>
+            <xs:attribute name="listURI"
+                          type="xs:anyURI"
+                          use="optional"
+                          fixed="urn:xoev-de:xnachweis:codeliste:sprachen-iso-639-1"/>
+            <xs:attribute name="listVersionID" type="xs:normalizedString" use="required"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="Code.LoA">
+      <xs:annotation>
+         <xs:appinfo>
+            <codeliste>
+               <nameLang>eIDAS Levels Of Assurance</nameLang>
+               <nameKurz>LoA</nameKurz>
+               <nameTechnisch>loa</nameTechnisch>
+               <kennung>urn:xoev-de:xnachweis:codeliste:loa</kennung>
+               <beschreibung>Die mit dieser Codeliste beschriebenen eIDAS Levels Of Assurance sind im Kontext des SDG-OOTS und des NOOTS zu verwenden. Bei dieser Codeliste handelt es sich um eine Nachveröffentlichung der von DIGIT herausgegebenen Codeliste eIDAS Levels Of Assurance (urn:sr.oots.tech.europa.eu:codelists:loa) zur Unterstützung der Umsetzung des Standards XNachweis.</beschreibung>
+               <herausgebernameLang>Bundesverwaltungsamt</herausgebernameLang>
+               <herausgebernameKurz>BVA</herausgebernameKurz>
+            </codeliste>
+         </xs:appinfo>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:restriction base="xoev-code:Code">
+            <xs:sequence>
+               <xs:element name="code" type="xs:token" form="unqualified"/>
+            </xs:sequence>
+            <xs:attribute name="listURI"
+                          type="xs:anyURI"
+                          use="optional"
+                          fixed="urn:xoev-de:xnachweis:codeliste:loa"/>
+            <xs:attribute name="listVersionID" type="xs:normalizedString" use="required"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="Code.MessageType">
+      <xs:annotation>
+         <xs:appinfo>
+            <codeliste>
+               <nameLang>MessageTypes</nameLang>
+               <nameKurz>MessageTypes</nameKurz>
+               <nameTechnisch>messagetypes</nameTechnisch>
+               <kennung>urn:xoev-de:xnachweis:codeliste:messagetypes</kennung>
+               <beschreibung>Die mit dieser Codeliste beschriebenen Nachrichtentypen sind im Kontext des NOOTS zu verwenden. Die Codeliste enthält einen Eintrag für jeden Nachrichtentyp, der in der zugehörigen Version von XNachweis definiert wurde.</beschreibung>
+               <herausgebernameLang>Koordinierungsstelle für IT-Standards</herausgebernameLang>
+               <herausgebernameKurz>KoSIT</herausgebernameKurz>
+            </codeliste>
+            <versionCodeliste>
+               <version>1.2.0</version>
+               <beschreibung>Version 1.2.0 für die aktuelle Fassung des Standards.</beschreibung>
+               <versionCodelistenHandbuch>1.2</versionCodelistenHandbuch>
+            </versionCodeliste>
+            <codelistenspalten>
+               <code>
+                  <spaltennameLang>Technische Bezeichnung des Nachrichtentyps</spaltennameLang>
+                  <datentyp>string</datentyp>
+                  <codeSpalte>true</codeSpalte>
+                  <verwendung>required</verwendung>
+                  <empfohleneCodeSpalte>true</empfohleneCodeSpalte>
+               </code>
+               <name>
+                  <spaltennameLang>Name des Nachrichtentyps</spaltennameLang>
+                  <datentyp>string</datentyp>
+                  <codeSpalte>false</codeSpalte>
+                  <verwendung>required</verwendung>
+                  <empfohleneCodeSpalte>false</empfohleneCodeSpalte>
+               </name>
+            </codelistenspalten>
+            <genutzteCodeSpalte>code</genutzteCodeSpalte>
+         </xs:appinfo>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:restriction base="xoev-code:Code">
+            <xs:sequence>
+               <xs:element name="code" form="unqualified" type="xn-bdt:messagetypes"/>
+            </xs:sequence>
+            <xs:attribute name="listURI"
+                          type="xs:anyURI"
+                          use="optional"
+                          fixed="urn:xoev-de:xnachweis:codeliste:messagetypes"/>
+            <xs:attribute name="listVersionID"
+                          type="xs:normalizedString"
+                          use="optional"
+                          fixed="1.2.0"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="Code.NUTS">
+      <xs:annotation>
+         <xs:appinfo>
+            <codeliste>
+               <nameLang>Nomenclature of Territorial Units for Statistics</nameLang>
+               <nameKurz>NUTS</nameKurz>
+               <nameTechnisch>NUTS</nameTechnisch>
+               <kennung>urn:xoev-de:xnachweis:codeliste:nuts</kennung>
+               <beschreibung>Die mit dieser Codeliste beschriebenen Codes werden in der Nomenklatur der Gebietseinheiten für die Statistik (NUTS) verwendet. Bei dieser Codeliste handelt es sich um eine Nachveröffentlichung der vom Amt für Veröffentlichungen der Europäischen Union (Publications Office of the European Union) herausgegebenen Codeliste "Nomenclature of Territorial Units for Statistics" (http://publications.europa.eu/resource/authority/notation-type/NUTS) zur Unterstützung der Umsetzung des Standards XNachweis.</beschreibung>
+               <herausgebernameLang>Bundesverwaltungsamt</herausgebernameLang>
+               <herausgebernameKurz>BVA</herausgebernameKurz>
+            </codeliste>
+         </xs:appinfo>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:restriction base="xoev-code:Code">
+            <xs:sequence>
+               <xs:element name="code" type="xs:token" form="unqualified"/>
+            </xs:sequence>
+            <xs:attribute name="listURI"
+                          type="xs:anyURI"
+                          use="optional"
+                          fixed="urn:xoev-de:xnachweis:codeliste:nuts"/>
+            <xs:attribute name="listVersionID" type="xs:normalizedString" use="required"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="Code.OOTSMediaTypes">
+      <xs:annotation>
+         <xs:appinfo>
+            <codeliste>
+               <nameLang>OOTS Binary Object Mime Code</nameLang>
+               <nameKurz>OOTS Media Types</nameKurz>
+               <nameTechnisch>OOTSMediaTypes</nameTechnisch>
+               <kennung>urn:xoev-de:xnachweis:codeliste:ootsmediatypes</kennung>
+               <beschreibung>Die mit dieser Codeliste beschriebenen Media Types sind im Kontext des SDG-OOTS und des NOOTS zu verwenden. Bei dieser Codeliste handelt es sich um eine Nachveröffentlichung der von DIGIT herausgegebenen Codeliste OOTS Binary Object Mime Code (urn:sr.oots.tech.europa.eu:codelists:ootsmediatypes) zur Unterstützung der Umsetzung des Standards XNachweis.</beschreibung>
+               <herausgebernameLang>Bundesverwaltungsamt</herausgebernameLang>
+               <herausgebernameKurz>BVA</herausgebernameKurz>
+            </codeliste>
+         </xs:appinfo>
+         <xs:documentation>The value of 'Format' of the requested distribution MUST be be part of the code list 'OOTSMediaTypes'.</xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:restriction base="xoev-code:Code">
+            <xs:sequence>
+               <xs:element name="code" type="xs:token" form="unqualified"/>
+            </xs:sequence>
+            <xs:attribute name="listURI"
+                          type="xs:anyURI"
+                          use="optional"
+                          fixed="urn:xoev-de:xnachweis:codeliste:ootsmediatypes"/>
+            <xs:attribute name="listVersionID" type="xs:normalizedString" use="required"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="Code.Procedure">
+      <xs:annotation>
+         <xs:appinfo>
+            <codeliste>
+               <nameLang>Procedures</nameLang>
+               <nameKurz>Procedures</nameKurz>
+               <nameTechnisch>procedures</nameTechnisch>
+               <kennung>urn:xoev-de:xnachweis:codeliste:procedures</kennung>
+               <beschreibung>Die mit dieser Codeliste beschriebenen Procedures sind im Kontext des SDG-OOTS und des NOOTS zu verwenden. Bei dieser Codeliste handelt es sich um eine Nachveröffentlichung der von DIGIT herausgegebenen Codeliste Procedures (urn:sr.oots.tech.europa.eu:codelists:procedures) zur Unterstützung der Umsetzung des Standards XNachweis.</beschreibung>
+               <herausgebernameLang>Bundesverwaltungsamt</herausgebernameLang>
+               <herausgebernameKurz>BVA</herausgebernameKurz>
+            </codeliste>
+         </xs:appinfo>
+      </xs:annotation>
+      <xs:complexContent>
+         <xs:restriction base="xoev-code:Code">
+            <xs:sequence>
+               <xs:element name="code" type="xs:token" form="unqualified"/>
+            </xs:sequence>
+            <xs:attribute name="listURI"
+                          type="xs:anyURI"
+                          use="optional"
+                          fixed="urn:xoev-de:xnachweis:codeliste:procedures"/>
+            <xs:attribute name="listVersionID" type="xs:normalizedString" use="required"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:complexType name="Code.ResponseStatusType">
+      <xs:complexContent>
+         <xs:restriction base="xoev-code:Code">
+            <xs:sequence>
+               <xs:element name="code" type="xs:token" form="unqualified"/>
+            </xs:sequence>
+            <xs:attribute name="listURI" type="xs:anyURI" use="required"/>
+            <xs:attribute name="listVersionID" type="xs:normalizedString" use="required"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:simpleType name="EvidenceTypeClassification">
+      <xs:restriction base="xs:normalizedString">
+         <xs:pattern value="https://sr.oots.tech.ec.europa.eu/evidencetypeclassifications/ec/.*"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="IDNrType">
+      <xs:annotation>
+         <xs:documentation>Dieser Typ enthält die Identifikationsnummer einer Person gemäß § 4 Abs. 2 IDNrG.</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="din91379:datatypeC">
+         <xs:pattern value="\d{11}"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:complexType name="Identifier">
+      <xs:sequence>
+         <xs:element name="value" type="xs:normalizedString"/>
+         <xs:element name="schemeID" type="xn-bdt:Code.IdentifierSchemes">
+            <xs:annotation>
+               <xs:documentation>The schemeID of this identifier.</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="Identifier.EAS">
+      <xs:simpleContent>
+         <xs:extension base="xs:normalizedString">
+            <xs:attribute name="schemeID" type="xn-bdt:SchemeID.EAS" use="required">
+               <xs:annotation>
+                  <xs:documentation>Scheme identifier for the agent identification. Must use the prefix 'urn:cef.eu:names:identifier:EAS:[Code]' (e.g. use the prefix 'urn:cef.eu:names:identifier:EAS:0088)'.</xs:documentation>
+               </xs:annotation>
+            </xs:attribute>
+         </xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:complexType name="Identifier.eIDAS">
+      <xs:simpleContent>
+         <xs:extension base="xn-bdt:Identifier.eIDAS.Pattern">
+            <xs:attribute name="schemeID"
+                          type="xn-bdt:SchemeID.eIDAS"
+                          use="required"
+                          fixed="eidas">
+               <xs:annotation>
+                  <xs:documentation>The schemeID of this identifier. Fixed value: eidas</xs:documentation>
+               </xs:annotation>
+            </xs:attribute>
+         </xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:simpleType name="Identifier.eIDAS.Pattern">
+      <xs:restriction base="xs:normalizedString">
+         <xs:pattern value=".{2}/.{2}/.*"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="SchemeID.EAS">
+      <xs:restriction base="xs:normalizedString">
+         <xs:pattern value="urn:cef.eu:names:identifier:EAS:.*"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="SchemeID.eIDAS">
+      <xs:restriction base="xs:normalizedString"/>
+   </xs:simpleType>
+   <xs:complexType name="String.Multilingual">
+      <xs:sequence>
+         <xs:element name="value" type="xs:normalizedString"/>
+         <xs:element name="lang" type="xn-bdt:Code.LanguageCode">
+            <xs:annotation>
+               <xs:documentation>The language of the content (e.g., name, description or title) encoded as ISO 639-1 two-letter code. Default value "en"</xs:documentation>
+            </xs:annotation>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="Text">
+      <xs:restriction base="xs:string"/>
+   </xs:simpleType>
+   <xs:simpleType name="URI.DataModelScheme">
+      <xs:restriction base="xs:anyURI">
+         <xs:pattern value="https://sr.oots.tech.ec.europa.eu/distributions/.*"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="UUID">
+      <xs:restriction base="xs:normalizedString">
+         <xs:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="UUID.SR.Requirements">
+      <xs:restriction base="xs:normalizedString">
+         <xs:pattern value="https://sr.oots.tech.ec.europa.eu/requirements/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="UUID.URN">
+      <xs:restriction base="xs:normalizedString">
+         <xs:pattern value="urn:uuid:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="messagetypes">
+      <xs:annotation>
+         <xs:appinfo>
+            <codeliste>
+               <nameLang>MessageTypes</nameLang>
+               <nameKurz>MessageTypes</nameKurz>
+               <nameTechnisch>messagetypes</nameTechnisch>
+               <kennung>urn:xoev-de:xnachweis:codeliste:messagetypes</kennung>
+               <beschreibung>Die mit dieser Codeliste beschriebenen Nachrichtentypen sind im Kontext des NOOTS zu verwenden. Die Codeliste enthält einen Eintrag für jeden Nachrichtentyp, der in der zugehörigen Version von XNachweis definiert wurde.</beschreibung>
+               <herausgebernameLang>Koordinierungsstelle für IT-Standards</herausgebernameLang>
+               <herausgebernameKurz>KoSIT</herausgebernameKurz>
+            </codeliste>
+            <versionCodeliste>
+               <version>1.2.0</version>
+               <beschreibung>Version 1.2.0 für die aktuelle Fassung des Standards.</beschreibung>
+               <versionCodelistenHandbuch>1.2</versionCodelistenHandbuch>
+            </versionCodeliste>
+            <codelistenspalten>
+               <code>
+                  <spaltennameLang>Technische Bezeichnung des Nachrichtentyps</spaltennameLang>
+                  <datentyp>string</datentyp>
+                  <codeSpalte>true</codeSpalte>
+                  <verwendung>required</verwendung>
+                  <empfohleneCodeSpalte>true</empfohleneCodeSpalte>
+               </code>
+               <name>
+                  <spaltennameLang>Name des Nachrichtentyps</spaltennameLang>
+                  <datentyp>string</datentyp>
+                  <codeSpalte>false</codeSpalte>
+                  <verwendung>required</verwendung>
+                  <empfohleneCodeSpalte>false</empfohleneCodeSpalte>
+               </name>
+            </codelistenspalten>
+         </xs:appinfo>
+      </xs:annotation>
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="DE.EvidenceErrorResponse.0103">
+            <xs:annotation>
+               <xs:appinfo>
+                  <name>Fehlermeldung, wenn der Nachweis nicht bereitgestellt werden kann</name>
+               </xs:appinfo>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="DE.EvidenceErrorResponse.0303">
+            <xs:annotation>
+               <xs:appinfo>
+                  <name>Fehlernachricht zur Anfrage eines Nachweises</name>
+               </xs:appinfo>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="DE.EvidenceOrder.0401">
+            <xs:annotation>
+               <xs:appinfo>
+                  <name>Nachricht zur Beauftragung eines Nachweisabrufs über das EU-OOTS</name>
+               </xs:appinfo>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="DE.EvidenceOrderErrorResponse.0403">
+            <xs:annotation>
+               <xs:appinfo>
+                  <name>Fehlernachricht zur Beauftragung eines Nachweisabrufs über das EU-OOTS</name>
+               </xs:appinfo>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="DE.EvidenceOrderResponse.0402">
+            <xs:annotation>
+               <xs:appinfo>
+                  <name>Antwortnachricht zur Beauftragung eines Nachweisabrufs über das EU-OOTS</name>
+               </xs:appinfo>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="DE.EvidenceRequest.0101">
+            <xs:annotation>
+               <xs:appinfo>
+                  <name>Anfrage eines Nachweises von einem nationalen Data Provider</name>
+               </xs:appinfo>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="DE.EvidenceRequest.0301">
+            <xs:annotation>
+               <xs:appinfo>
+                  <name>Nachricht zur Anfrage eines Nachweises</name>
+               </xs:appinfo>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="DE.EvidenceResponse.0102">
+            <xs:annotation>
+               <xs:appinfo>
+                  <name>Übermittlung des Nachweises als Antwort auf eine Nachricht zur Nachweisanfrage</name>
+               </xs:appinfo>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="DE.EvidenceResponse.0302">
+            <xs:annotation>
+               <xs:appinfo>
+                  <name>Antwortnachricht zur Anfrage eines Nachweises</name>
+               </xs:appinfo>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="DE.GetEvidence.0411">
+            <xs:annotation>
+               <xs:appinfo>
+                  <name>Nachricht zur Abholung eines Nachweises über das EU-OOTS</name>
+               </xs:appinfo>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="DE.GetEvidenceErrorResponse.0413">
+            <xs:annotation>
+               <xs:appinfo>
+                  <name>Fehlernachricht zur Abholung eines Nachweises über das EU-OOTS</name>
+               </xs:appinfo>
+            </xs:annotation>
+         </xs:enumeration>
+         <xs:enumeration value="DE.GetEvidenceResponse.0412">
+            <xs:annotation>
+               <xs:appinfo>
+                  <name>Antwort zur Abholung eines Nachweises über das EU-OOTS</name>
+               </xs:appinfo>
+            </xs:annotation>
+         </xs:enumeration>
+      </xs:restriction>
+   </xs:simpleType>
+</xs:schema>

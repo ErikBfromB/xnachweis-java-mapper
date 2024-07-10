@@ -1,0 +1,770 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:xn-de="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-de-noots"
+           xmlns:xn-bdt="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-basisdatentypen"
+           xmlns:xn-bk="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-baukasten"
+           targetNamespace="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-de-noots"
+           version="1.2.0"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+   <xs:annotation>
+      <xs:appinfo>
+         <standard>
+            <nameLang>XNachweis</nameLang>
+            <nameKurz>XNachweis</nameKurz>
+            <nameTechnisch>xnachweis</nameTechnisch>
+            <kennung>urn:xoev-de:bva:standard:xnachweis</kennung>
+            <beschreibung>XNachweis ist ein Standard des Bundesverwaltungsamtes (BVA) für die fachunabhängige Anforderung und Übermittlung von Nachweisen zu Personen und Unternehmen. Mittels XNachweis werden nationale Verwaltungsportale, registerführende wie auch weitere öffentlichen Stellen an das nationale (NOOTS) und das europäischen Once Only Technical System (SDG-OOTS) angebunden. 
+
+Der Standard ist interoperabel mit den europäischen Spezifikationen (EU-Technical Design Documents, kurz EU-TDD) der Verordnung (EU) 2018/1724 des Europäischen Parlaments und des Rates (SDG-VO) und gleichzeitig ausgerichtet auf die spezifischen Anforderungen eines nationalen OOTS. Der Standard XNachweis wird durch das BVA herausgegeben und im Auftrag des BVA durch die KoSIT betrieben.
+</beschreibung>
+         </standard>
+         <versionStandard>
+            <version>1.2.0</version>
+            <beschreibung>Mit der vorliegenden Version 1.2.0 wird eine neue Nachrichtengruppe zur Umsetzung des Nachweisabrufs von nationalen Onlinediensten aus nationalen Registern im NOOTS bereitgestellt. Im Rahmen der Umsetzung wurde vorrangig der Nachweisabruf zu natürlichen Personen ausgearbeitet. Hierzu wurde die Möglichkeit zur Übermittlung der IDNr und eines von der Vermittlungsstelle ausgestellten, zum Abruf berechtigenden Tokens in der Nachricht zur Nachweisanfrage umgesetzt. Des Weiteren wurden geringfügige Verbesserungen an bestehenden Inhalten aller Nachrichtengruppen vorgenommen, darunter zum Beispiel die Änderung des Geburtsorts zur Identifikation einer Person von einer Pflichtangabe zu einer optionalen Angabe sowie die Ausgestaltung der Fehlernachrichten. Die kommenden Versionen werden weitere nationale Anforderungen umsetzen, wie die benötigten Angaben für die Protokollierung eines Nachweisabrufs im Datenschutzcockpit oder die nationale Identifikation von Unternehmen mithilfe der bundeseinheitlichen Wirtschaftsnummer. Begleitend zur Veröffentlichung dieser Version soll eine entsprechende Konfiguration des Prüftools bereitgestellt werden.</beschreibung>
+            <versionXOEVProfil>3.0.1</versionXOEVProfil>
+            <versionXOEVHandbuch>3.0.1</versionXOEVHandbuch>
+            <versionXGenerator>3.1.1</versionXGenerator>
+            <versionModellierungswerkzeug>19.0 SP 4</versionModellierungswerkzeug>
+            <nameModellierungswerkzeug>MagicDraw</nameModellierungswerkzeug>
+         </versionStandard>
+      </xs:appinfo>
+   </xs:annotation>
+   <xs:import schemaLocation="xnachweis-basisdatentypen.xsd"
+              namespace="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-basisdatentypen"/>
+   <xs:import schemaLocation="xnachweis-baukasten.xsd"
+              namespace="urn:xoev-de:bva:standard:xnachweis:schema:xnachweis-baukasten"/>
+   <xs:element name="DE.EvidenceRequest.0101">
+      <xs:annotation>
+         <xs:documentation>Anfrage eines Nachweises von einem nationalen Data Provider. Genutzt von einem nationalen Data Consumer in Anwendungsfall 1 der NOOTS High-Level-Architecture.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="xn-bk:Nachricht">
+               <xs:sequence>
+                  <xs:element name="lang" type="xn-bdt:Code.LanguageCode">
+                     <xs:annotation>
+                        <xs:documentation>Die vom Evidence Requester bevorzugte Sprache des Nachweises kodiert als zweistelliger ISO 639-1 Code. Falls die bevorzugte Sprache nicht verfügbar ist, wird der Nachweis in der Antwort in der verfügbaren natürlichen Sprache zurückgegeben.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="SpecificationIdentifier"
+                              fixed="urn:xoev-de:bva:standard:xnachweis_1.2.0"
+                              type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Version der Spezifikation.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssueDateTime" type="xs:dateTime">
+                     <xs:annotation>
+                        <xs:documentation>Ausstellungsdatum und -uhrzeit der Nachricht. Für die einwandfreie Nachverfolgbarkeit und gezielte Steuerung auf der Transportebene müssen alle Zeitstempel in einem UTC-Format inkl. Zeitzone gesetzt werden. Ein Beispiel des W3-Konsortiums für eine in UTC definierte Zeitangabe ist: 1994-11-05T13:15:30Z</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceRequester"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Nachweis anfragt. Da die Verantwortung für Nachweisanfrage und Bearbeitung des Verfahrens, in dessen Kontext der Nachweis eingeholt wird, auf mehrere Stellen aufgeteilt werden kann, sind hier mehrere Einträge zulässig, die jedoch nach ihrem AgentType unterschieden werden müssen.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceProvider" type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Datendienst zur Auslieferung des Nachweises zur Verfügung stellt.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssuedToken" type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Von der Vermittlungsstelle ausgestelltes, gesiegeltes Token, das sicherstellt, dass abrufende Stelle und nachweisliefernde Stelle zu einem angegebenen Zweck miteinander kommunizieren dürfen. Die Vermittlungsstelle führt bei verwaltungsbereichsübergreifender Datenübermittlungen unter Verwendung der IDNr eine abstrakte Berechtigungsprüfung gemäß § 7 Abs. 2 IDNrG durch. Der Data Provider entnimmt das Token der Nachricht und prüft die Echtheit anhand der Siegelung der Vermittlungsstelle (mittels eines von der Vermittlungsstelle ausgestellten Zertifikats). Er validiert das Token, d.h. er prüft, ob die Angaben im Token (zu Kommunikationspartner, Kommunikationszweck, Verwendung der IDNr, Hash des Requests) mit dem tatsächlichen Inhalt des Requests übereinstimmen. Dazu erzeugt er selbst den Hash des Requests.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="Query" type="xn-bk:QueryType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Parameter für die Nachweisanfrage.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+               </xs:sequence>
+               <xs:attribute name="id" type="xn-bdt:UUID.URN" use="required">
+                  <xs:annotation>
+                     <xs:documentation>Der Identifikator für die Nachweisanfrage.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DE.EvidenceResponse.0102">
+      <xs:annotation>
+         <xs:documentation>Übermittlung des Nachweises als Antwort auf eine Nachricht zur Nachweisanfrage. Genutzt von einem nationalen Data Provider in Anwendungsfall 1 der NOOTS High-Level-Architecture.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="xn-bk:Nachricht">
+               <xs:sequence>
+                  <xs:element name="status" type="xn-bdt:Code.ResponseStatusType">
+                     <xs:annotation>
+                        <xs:documentation>Status der Antwort. Wird ein Nachweis geliefert, wird der Wert "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success" eingetragen.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="SpecificationIdentifier"
+                              fixed="urn:xoev-de:bva:standard:xnachweis_1.2.0"
+                              type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Version der Spezifikation.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceResponseIdentifier" type="xn-bdt:UUID">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Evidence Response.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssueDateTime" type="xs:dateTime">
+                     <xs:annotation>
+                        <xs:documentation>Ausstellungsdatum und -uhrzeit der Nachricht. Für die einwandfreie Nachverfolgbarkeit und gezielte Steuerung auf der Transportebene müssen alle Zeitstempel in einem UTC-Format inkl. Zeitzone gesetzt werden. Ein Beispiel des W3-Konsortiums für eine in UTC definierte Zeitangabe ist: 1994-11-05T13:15:30Z</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceProvider"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Datendienst zur Auslieferung des Nachweises zur Verfügung stellt. Jede Ausprägung von Klassifikationen beteiligter Akteure (Element Classification) darf hier nur maximal einmal eingetragen werden.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceRequester"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Nachweis anfragt. Da die Verantwortung für Nachweisanfrage und Bearbeitung des Verfahrens, in dessen Kontext der Nachweis eingeholt wird, auf mehrere Stellen aufgeteilt werden kann, sind hier mehrere Einträge zulässig, die jedoch nach ihrem AgentType unterschieden werden müssen.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceAvailability">
+                     <xs:annotation>
+                        <xs:documentation>Auswahl des Evidence Provider den Nachweis direkt in der Nachricht bereitzustellen oder, falls Nachweis aktuell nicht verfügbar, den frühestmöglichen Bereitstellungszeitpunkt anzugeben.</xs:documentation>
+                     </xs:annotation>
+                     <xs:complexType>
+                        <xs:choice>
+                           <xs:element name="RegistryObjectList"
+                                       maxOccurs="unbounded"
+                                       type="xn-bk:RegistryObjectType_NOOTS">
+                              <xs:annotation>
+                                 <xs:documentation>Element zur Auflistung der Registry Objects der Antwort.</xs:documentation>
+                              </xs:annotation>
+                           </xs:element>
+                           <xs:element name="ResponseAvailableDateTime" type="xs:dateTime">
+                              <xs:annotation>
+                                 <xs:documentation>Datum und Uhrzeit, zu welcher der Nachweis verfügbar ist, in Fällen von asynchroner Nachweisausstellung. Zu diesem Zeitpunkt kann eine weiterere Anfrage gestellt werden.</xs:documentation>
+                              </xs:annotation>
+                           </xs:element>
+                        </xs:choice>
+                     </xs:complexType>
+                  </xs:element>
+               </xs:sequence>
+               <xs:attribute name="requestid" type="xn-bdt:UUID.URN" use="required">
+                  <xs:annotation>
+                     <xs:documentation>Der Identifikator der Evidence Request. Muss dem Identifikator des Evidence Requests entsprechen, auf den diese Nachricht antwortet.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DE.EvidenceErrorResponse.0103">
+      <xs:annotation>
+         <xs:documentation>Fehlermeldung, wenn der Nachweis nicht bereitgestellt werden kann. Genutzt von einem nationalen Data Provider in Anwendungsfall 1 der NOOTS High-Level-Architecture.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="xn-bk:Nachricht">
+               <xs:sequence>
+                  <xs:element name="status" type="xn-bdt:Code.ResponseStatusType">
+                     <xs:annotation>
+                        <xs:documentation>Status der Antwort.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="SpecificationIdentifier"
+                              fixed="urn:xoev-de:bva:standard:xnachweis_1.2.0"
+                              type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Version der Spezifikation.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceResponseIdentifier" type="xn-bdt:UUID">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Evidence Error Response.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssueDateTime" type="xs:dateTime">
+                     <xs:annotation>
+                        <xs:documentation>Ausstellungsdatum und -uhrzeit der Nachricht. Für die einwandfreie Nachverfolgbarkeit und gezielte Steuerung auf der Transportebene müssen alle Zeitstempel in einem UTC-Format inkl. Zeitzone gesetzt werden. Ein Beispiel des W3-Konsortiums für eine in UTC definierte Zeitangabe ist: 1994-11-05T13:15:30Z</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="ErrorProvider" type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, welche die Fehlernachricht ausstellt, mit ihrer Klassifikation im Element Classification.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceRequester"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Nachweis anfragt. Da die Verantwortung für Nachweisanfrage und Bearbeitung des Verfahrens, in dessen Kontext der Nachweis eingeholt wird, auf mehrere Stellen aufgeteilt werden kann, sind hier mehrere Einträge zulässig, die jedoch nach ihrem AgentType unterschieden werden müssen.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="Exception"
+                              maxOccurs="unbounded"
+                              type="xn-bk:RegistryExceptionType">
+                     <xs:annotation>
+                        <xs:documentation>Beschreibt den Fehler beim Verarbeiten des Evidence Requests.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+               </xs:sequence>
+               <xs:attribute name="requestid" type="xn-bdt:UUID.URN" use="required">
+                  <xs:annotation>
+                     <xs:documentation>Der Identifikator des Evidence Requests. Muss dem Identifikator des Evidence Requests entsprechen, auf den diese Nachricht antwortet.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DE.EvidenceRequest.0301">
+      <xs:annotation>
+         <xs:documentation>Anfrage eines Nachweises von einem nationalen Data Provider. Genutzt von der nationalen Intermediären Plattform in Anwendungsfall 3 der NOOTS High-Level-Architecture.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="xn-bk:Nachricht">
+               <xs:sequence>
+                  <xs:element name="lang" type="xn-bdt:Code.LanguageCode">
+                     <xs:annotation>
+                        <xs:documentation>Die vom Evidence Requester bevorzugte Sprache des Nachweises kodiert als zweistelliger ISO 639-1 Code. Falls die bevorzugte Sprache nicht verfügbar ist, wird der Nachweis in der Antwort in der verfügbaren natürlichen Sprache zurückgegeben.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="SpecificationIdentifier"
+                              fixed="urn:xoev-de:bva:standard:xnachweis_1.2.0"
+                              type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Version der Spezifikation.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssueDateTime" type="xs:dateTime">
+                     <xs:annotation>
+                        <xs:documentation>Ausstellungsdatum und -uhrzeit der Nachricht. Für die einwandfreie Nachverfolgbarkeit und gezielte Steuerung auf der Transportebene müssen alle Zeitstempel in einem UTC-Format inkl. Zeitzone gesetzt werden. Ein Beispiel des W3-Konsortiums für eine in UTC definierte Zeitangabe ist: 1994-11-05T13:15:30Z</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssuedToken" type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Von der Vermittlungsstelle ausgestelltes, gesiegeltes Token, das sicherstellt, dass abrufende Stelle und nachweisliefernde Stelle zu einem angegebenen Zweck miteinander kommunizieren dürfen. Die Vermittlungsstelle führt bei verwaltungsbereichsübergreifender Datenübermittlungen unter Verwendung der IDNr eine abstrakte Berechtigungsprüfung gemäß § 7 Abs. 2 IDNrG durch. Der Data Provider entnimmt das Token der Nachricht und prüft die Echtheit anhand der Siegelung der Vermittlungsstelle (mittels eines von der Vermittlungsstelle ausgestellten Zertifikats). Er validiert das Token, d.h. er prüft, ob die Angaben im Token (zu Kommunikationspartner, Kommunikationszweck, Verwendung der IDNr, Hash des Requests) mit dem tatsächlichen Inhalt des Requests übereinstimmen. Dazu erzeugt er selbst den Hash des Requests.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceRequester"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Nachweis anfragt. Da die Verantwortung für Nachweisanfrage und Bearbeitung des Verfahrens, in dessen Kontext der Nachweis eingeholt wird, auf mehrere Stellen aufgeteilt werden kann, sind hier mehrere Einträge zulässig, die jedoch nach ihrem AgentType unterschieden werden müssen.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceProvider" type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Datendienst zur Auslieferung des Nachweises zur Verfügung stellt.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="Query" type="xn-bk:QueryType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Parameter für die Nachweisanfrage.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+               </xs:sequence>
+               <xs:attribute name="id" type="xn-bdt:UUID.URN" use="required">
+                  <xs:annotation>
+                     <xs:documentation>Der Identifikator für die Nachweisanfrage.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DE.EvidenceResponse.0302">
+      <xs:annotation>
+         <xs:documentation>Übermittlung des Nachweises als Antwort auf eine Nachricht zur Nachweisanfrage. Genutzt von einem nationalen Data Provider in Anwendungsfall 3 der NOOTS High-Level-Architecture.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="xn-bk:Nachricht">
+               <xs:sequence>
+                  <xs:element name="status" type="xn-bdt:Code.ResponseStatusType">
+                     <xs:annotation>
+                        <xs:documentation>Status der Antwort. Wird ein Nachweis geliefert, wird der Wert "urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success" eingetragen.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="SpecificationIdentifier"
+                              fixed="urn:xoev-de:bva:standard:xnachweis_1.2.0"
+                              type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Version der Spezifikation.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceResponseIdentifier" type="xn-bdt:UUID">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Evidence Response.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssueDateTime" type="xs:dateTime">
+                     <xs:annotation>
+                        <xs:documentation>Ausstellungsdatum und -uhrzeit der Nachricht. Für die einwandfreie Nachverfolgbarkeit und gezielte Steuerung auf der Transportebene müssen alle Zeitstempel in einem UTC-Format inkl. Zeitzone gesetzt werden. Ein Beispiel des W3-Konsortiums für eine in UTC definierte Zeitangabe ist: 1994-11-05T13:15:30Z</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceProvider"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Datendienst zur Auslieferung des Nachweises zur Verfügung stellt. Jede Ausprägung von Klassifikationen beteiligter Akteure (Element Classification) darf hier nur maximal einmal eingetragen werden.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceRequester"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Nachweis anfragt. Da die Verantwortung für Nachweisanfrage und Bearbeitung des Verfahrens, in dessen Kontext der Nachweis eingeholt wird, auf mehrere Stellen aufgeteilt werden kann, sind hier mehrere Einträge zulässig, die jedoch nach ihrem AgentType unterschieden werden müssen.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceAvailability">
+                     <xs:annotation>
+                        <xs:documentation>Auswahl des Evidence Provider den Nachweis direkt in der Nachricht bereitzustellen oder, falls Nachweis aktuell nicht verfügbar, den frühestmöglichen Bereitstellungszeitpunkt anzugeben.</xs:documentation>
+                     </xs:annotation>
+                     <xs:complexType>
+                        <xs:choice>
+                           <xs:element name="RegistryObjectList"
+                                       maxOccurs="unbounded"
+                                       type="xn-bk:RegistryObjectType_NOOTS">
+                              <xs:annotation>
+                                 <xs:documentation>Element zur Auflistung der Registry Objects der Antwort.</xs:documentation>
+                              </xs:annotation>
+                           </xs:element>
+                           <xs:element name="ResponseAvailableDateTime" type="xs:dateTime">
+                              <xs:annotation>
+                                 <xs:documentation>Datum und Uhrzeit, zu welcher der Nachweis verfügbar ist, in Fällen von asynchroner Nachweisausstellung. Zu diesem Zeitpunkt kann eine weiterere Anfrage gestellt werden.</xs:documentation>
+                              </xs:annotation>
+                           </xs:element>
+                        </xs:choice>
+                     </xs:complexType>
+                  </xs:element>
+               </xs:sequence>
+               <xs:attribute name="requestid" type="xn-bdt:UUID.URN" use="required">
+                  <xs:annotation>
+                     <xs:documentation>Der Identifikator der Evidence Request. Muss dem Identifikator des Evidence Requests entsprechen, auf den diese Nachricht antwortet.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DE.EvidenceErrorResponse.0303">
+      <xs:annotation>
+         <xs:documentation>Fehlermeldung, wenn der Nachweis nicht bereitgestellt werden kann. Genutzt von einem nationalen Data Provider in Anwendungsfall 1 der NOOTS High-Level-Architecture.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="xn-bk:Nachricht">
+               <xs:sequence>
+                  <xs:element name="status" type="xn-bdt:Code.ResponseStatusType">
+                     <xs:annotation>
+                        <xs:documentation>Status der Antwort.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="SpecificationIdentifier"
+                              fixed="urn:xoev-de:bva:standard:xnachweis_1.2.0"
+                              type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Version der Spezifikation.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceResponseIdentifier" type="xn-bdt:UUID">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Evidence Error Response.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssueDateTime" type="xs:dateTime">
+                     <xs:annotation>
+                        <xs:documentation>Ausstellungsdatum und -uhrzeit der Nachricht. Für die einwandfreie Nachverfolgbarkeit und gezielte Steuerung auf der Transportebene müssen alle Zeitstempel in einem UTC-Format inkl. Zeitzone gesetzt werden. Ein Beispiel des W3-Konsortiums für eine in UTC definierte Zeitangabe ist: 1994-11-05T13:15:30Z</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="ErrorProvider" type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, welche die Fehlernachricht ausstellt, mit ihrer Klassifikation im Element Classification.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceRequester"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Nachweis anfragt. Da die Verantwortung für Nachweisanfrage und Bearbeitung des Verfahrens, in dessen Kontext der Nachweis eingeholt wird, auf mehrere Stellen aufgeteilt werden kann, sind hier mehrere Einträge zulässig, die jedoch nach ihrem AgentType unterschieden werden müssen.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="Exception"
+                              maxOccurs="unbounded"
+                              type="xn-bk:RegistryExceptionType">
+                     <xs:annotation>
+                        <xs:documentation>Beschreibt den Fehler beim Verarbeiten des Evidence Requests.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+               </xs:sequence>
+               <xs:attribute name="requestid" type="xn-bdt:UUID.URN" use="required">
+                  <xs:annotation>
+                     <xs:documentation>Der Identifikator des Evidence Requests. Muss dem Identifikator des Evidence Requests entsprechen, auf den diese Nachricht antwortet.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DE.EvidenceOrder.0401">
+      <xs:annotation>
+         <xs:documentation>Beauftragung eines EU-OOTS-Nachweisabrufs für ein Verfahren bei einer Intermediären Plattform. Genutzt von einem nationalen Data Consumer in Anwendungsfall 4 der NOOTS High-Level-Architecture.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="xn-bk:Nachricht">
+               <xs:sequence>
+                  <xs:element name="lang" type="xn-bdt:Code.LanguageCode">
+                     <xs:annotation>
+                        <xs:documentation>Die vom Data Consumer bevorzugte Sprache des Nachweises kodiert als zweistelliger ISO 639-1 Code. Der Default-Wert im Element code ist "DE".</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="SpecificationIdentifier"
+                              fixed="urn:xoev-de:bva:standard:xnachweis_1.2.0"
+                              type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Version der Spezifikation.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssueDateTime" type="xs:dateTime">
+                     <xs:annotation>
+                        <xs:documentation>Ausstellungsdatum und -uhrzeit der Nachricht. Für die einwandfreie Nachverfolgbarkeit und gezielte Steuerung auf der Transportebene müssen alle Zeitstempel in einem UTC-Format inkl. Zeitzone gesetzt werden. Ein Beispiel des W3-Konsortiums für eine in UTC definierte Zeitangabe ist: 1994-11-05T13:15:30Z</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssuedToken" type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Von der Vermittlungsstelle ausgestelltes, gesiegeltes Token, das sicherstellt, dass abrufende Stelle und nachweisliefernde Stelle zu einem angegebenen Zweck miteinander kommunizieren dürfen. Die Vermittlungsstelle führt bei verwaltungsbereichsübergreifender Datenübermittlungen unter Verwendung der IDNr eine abstrakte Berechtigungsprüfung gemäß § 7 Abs. 2 IDNrG durch. Der Data Provider entnimmt das Token der Nachricht und prüft die Echtheit anhand der Siegelung der Vermittlungsstelle (mittels eines von der Vermittlungsstelle ausgestellten Zertifikats). Er validiert das Token, d.h. er prüft, ob die Angaben im Token (zu Kommunikationspartner, Kommunikationszweck, Verwendung der IDNr, Hash des Requests) mit dem tatsächlichen Inhalt des Requests übereinstimmen. Dazu erzeugt er selbst den Hash des Requests.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceProvider" type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Nachweis zur Verfügung stellt. In diesem Fall ist hier die für den Data Consumer zuständige Intermediäre Plattform einzutragen, die über den AgentType als Intermediäre Plattform zu kennzeichnen ist.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceRequester"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Nachweis anfragt. Da die Verantwortung für Nachweisanfrage und Bearbeitung des Verfahrens, in dessen Kontext der Nachweis eingeholt wird, auf mehrere Stellen aufgeteilt werden kann, sind hier mehrere Einträge zulässig, die jedoch nach ihrem AgentType unterschieden werden müssen.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="Procedure" type="xn-bdt:Code.Procedure">
+                     <xs:annotation>
+                        <xs:documentation>Das Verwaltungsverfahren, in dessen Kontext der Nachweisabruf ausgelöst wurde.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="Requirement"
+                              minOccurs="0"
+                              maxOccurs="unbounded"
+                              type="xn-bk:RequirementType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Für das EU-OOTS abgestimmter Datenkranz für die Identifizierung von Nachweisanforderungen für ein Verwaltungsverfahren.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="Query" type="xn-bk:QueryType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Parameter für die Nachweisanfrage.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="BackToEvidenceRequesterURL" type="xs:anyURI">
+                     <xs:annotation>
+                        <xs:documentation>URL für die Rückführung des Nutzers von der Intermediären Plattform auf die Nutzeroberfläche des Data Consumer, nachdem die notwendigen Schritte für den Nachweisabruf erledigt sind.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+               </xs:sequence>
+               <xs:attribute name="id" type="xn-bdt:UUID.URN" use="required">
+                  <xs:annotation>
+                     <xs:documentation>Ein Identifikator für die Evidence Order. Wird vergeben vom Data Consumer.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DE.EvidenceOrderResponse.0402">
+      <xs:annotation>
+         <xs:documentation>Übermittlung eines Links zur Nutzeroberfläche der Intermediären Plattform als Antwort auf eine EvidenceOrder-Nachricht. Genutzt von der nationalen Intermediären Plattform in Anwendungsfall 4 der NOOTS High-Level-Architecture.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="xn-bk:Nachricht">
+               <xs:sequence>
+                  <xs:element name="SpecificationIdentifier"
+                              fixed="urn:xoev-de:bva:standard:xnachweis_1.2.0"
+                              type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Version der Spezifikation.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="OrderResponseIdentifier" type="xn-bdt:UUID">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die EvidenceOrderReponse-Nachricht. Wird von der Intermediären Plattform vergeben.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssueDateTime" type="xs:dateTime">
+                     <xs:annotation>
+                        <xs:documentation>Ausstellungsdatum und -uhrzeit der Nachricht. Für die einwandfreie Nachverfolgbarkeit und gezielte Steuerung auf der Transportebene müssen alle Zeitstempel in einem UTC-Format inkl. Zeitzone gesetzt werden. Ein Beispiel des W3-Konsortiums für eine in UTC definierte Zeitangabe ist: 1994-11-05T13:15:30Z</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="URLtoIP" type="xs:anyURI">
+                     <xs:annotation>
+                        <xs:documentation>Link zur Nutzeroberfläche der Intermediären Plattform.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="ConversationID" type="xs:ID">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator der Sitzung, zu der der Data Consumer nun die Ergebnisse des Nachweisabrufs abrufen möchte. Er muss der ConversationID entsprechen, die in der Nachricht EvidenceOrderResponse von der Intermediären Plattform für den Vorgang vergeben wurde.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+               </xs:sequence>
+               <xs:attribute name="orderid" type="xn-bdt:UUID.URN" use="required">
+                  <xs:annotation>
+                     <xs:documentation>Identifikator der Evidence Order. Muss der ID für die Evidence Order entsprechen, auf die diese Nachricht antwortet.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DE.EvidenceOrderErrorResponse.0403">
+      <xs:annotation>
+         <xs:documentation>Fehlermeldung, weil EvidenceOrder-Nachricht nicht beantwortet werden kann. Genutzt von der nationalen Intermediären Plattform in Anwendungsfall 4 der NOOTS High-Level-Architecture.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="xn-bk:Nachricht">
+               <xs:sequence>
+                  <xs:element name="status" type="xn-bdt:Code.ResponseStatusType">
+                     <xs:annotation>
+                        <xs:documentation>Status der Antwort.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="SpecificationIdentifier"
+                              fixed="urn:xoev-de:bva:standard:xnachweis_1.2.0"
+                              type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Version der Spezifikation.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceResponseIdentifier" type="xn-bdt:UUID">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Evidence Error Response.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssueDateTime" type="xs:dateTime">
+                     <xs:annotation>
+                        <xs:documentation>Ausstellungsdatum und -uhrzeit der Nachricht. Für die einwandfreie Nachverfolgbarkeit und gezielte Steuerung auf der Transportebene müssen alle Zeitstempel in einem UTC-Format inkl. Zeitzone gesetzt werden. Ein Beispiel des W3-Konsortiums für eine in UTC definierte Zeitangabe ist: 1994-11-05T13:15:30Z</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="ErrorProvider" type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, welche die Fehlernachricht ausstellt, mit ihrer Klassifikation im Element Classification.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceRequester"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Nachweis anfragt. Da die Verantwortung für Nachweisanfrage und Bearbeitung des Verfahrens, in dessen Kontext der Nachweis eingeholt wird, auf mehrere Stellen aufgeteilt werden kann, sind hier mehrere Einträge zulässig, die jedoch nach ihrem AgentType unterschieden werden müssen.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="Exception"
+                              maxOccurs="unbounded"
+                              type="xn-bk:RegistryExceptionType">
+                     <xs:annotation>
+                        <xs:documentation>Beschreibt den Fehler beim Verarbeiten des Evidence Requests.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+               </xs:sequence>
+               <xs:attribute name="requestid" type="xn-bdt:UUID.URN" use="required">
+                  <xs:annotation>
+                     <xs:documentation>Der Identifikator des Evidence Requests. Muss dem Identifikator des Evidence Requests entsprechen, auf den diese Nachricht antwortet.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DE.GetEvidence.0411">
+      <xs:annotation>
+         <xs:documentation>Abholen eines Nachweises bei der Intermediären Plattform in Verbindung mit einer laufenden EU-OOTS-Nachweisabruf-Beauftragung. Genutzt von einem nationalen Data Consumer in Anwendungsfall 4 der NOOTS High-Level-Architecture.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="xn-bk:Nachricht">
+               <xs:sequence>
+                  <xs:element name="SpecificationIdentifier"
+                              fixed="urn:xoev-de:bva:standard:xnachweis_1.2.0"
+                              type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Version der Spezifikation.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssueDateTime" type="xs:dateTime">
+                     <xs:annotation>
+                        <xs:documentation>Ausstellungsdatum und -uhrzeit der Nachricht. Für die einwandfreie Nachverfolgbarkeit und gezielte Steuerung auf der Transportebene müssen alle Zeitstempel in einem UTC-Format inkl. Zeitzone gesetzt werden. Ein Beispiel des W3-Konsortiums für eine in UTC definierte Zeitangabe ist: 1994-11-05T13:15:30Z</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="ConversationID" type="xs:ID">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator der Sitzung, zu der der Data Consumer nun die Ergebnisse des Nachweisabrufs abrufen möchte. Er muss der ConversationID entsprechen, die in der Nachricht EvidenceOrderResponse von der Intermediären Plattform für den Vorgang vergeben wurde.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+               </xs:sequence>
+               <xs:attribute name="id" type="xn-bdt:UUID.URN" use="required">
+                  <xs:annotation>
+                     <xs:documentation>Identifikator der GetEvidence-Nachricht. Wird vom Data Consumer vergeben.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DE.GetEvidenceResponse.0412">
+      <xs:annotation>
+         <xs:documentation>Übermittlung des Nachweises als Antwort auf eine GetEvidence-Nachricht. Genutzt von der nationalen Intermediären Plattform in Anwendungsfall 4 der NOOTS High-Level-Architecture.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="xn-bk:Nachricht">
+               <xs:sequence>
+                  <xs:element name="status" type="xn-bdt:Code.ResponseStatusType">
+                     <xs:annotation>
+                        <xs:documentation>Status der Antwort. Wird ein Nachweis geliefert, wird der Wert urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success eingetragen.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="SpecificationIdentifier"
+                              fixed="urn:xoev-de:bva:standard:xnachweis_1.2.0"
+                              type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Version der Spezifikation.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="GetEvidenceResponseIdentifier" type="xn-bdt:UUID">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die GetEvidenceResponse-Nachricht. Wird von der Intermediären Plattform vergeben.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssueDateTime" type="xs:dateTime">
+                     <xs:annotation>
+                        <xs:documentation>Ausstellungsdatum und -uhrzeit der Nachricht. Für die einwandfreie Nachverfolgbarkeit und gezielte Steuerung auf der Transportebene müssen alle Zeitstempel in einem UTC-Format inkl. Zeitzone gesetzt werden. Ein Beispiel des W3-Konsortiums für eine in UTC definierte Zeitangabe ist: 1994-11-05T13:15:30Z</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceProvider"
+                              minOccurs="2"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Nachweis ausgestellt hat sowie die Intermediäre Plattform müssen angegeben werden. Ihre verschiedenen Rollen bei der Nachweisausstellung bzw. Weiterleitung wird mithilfe des AgentType unterschieden.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceRequester"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Nachweis angefragt hat. Da die Verantwortung für Nachweisanfrage und Bearbeitung des Verfahrens, in dessen Kontext der Nachweis eingeholt wird, auf mehrere Stellen aufgeteilt werden kann, sind hier mehrere Einträge zulässig, die jedoch nach ihrem AgentType unterschieden werden müssen. Die Angabe zum Evidence Requester müssen denen entsprechen, die der Intermediären Plattform in der Nachricht Evidence Order mitgeteilt wurden.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceAvailability">
+                     <xs:annotation>
+                        <xs:documentation>Auswahl des Evidence Provider den Nachweis direkt in der Nachricht bereitzustellen oder, falls Nachweis aktuell nicht verfügbar, den frühestmöglichen Bereitstellungszeitpunkt anzugeben.</xs:documentation>
+                     </xs:annotation>
+                     <xs:complexType>
+                        <xs:choice>
+                           <xs:element name="RegistryObjectList"
+                                       maxOccurs="unbounded"
+                                       type="xn-bk:RegistryObjectType_NOOTS">
+                              <xs:annotation>
+                                 <xs:documentation>Element zur Auflistung der Registry Objects der Antwort.</xs:documentation>
+                              </xs:annotation>
+                           </xs:element>
+                           <xs:element name="ResponseAvailableDateTime"
+                                       maxOccurs="unbounded"
+                                       type="xs:dateTime">
+                              <xs:annotation>
+                                 <xs:documentation>Datum und Uhrzeit, zu welcher der Nachweis verfügbar ist, in Fällen von asynchroner Nachweisausstellung. Zu diesem Zeitpunkt kann eine weiterere Anfrage gestellt werden.</xs:documentation>
+                              </xs:annotation>
+                           </xs:element>
+                        </xs:choice>
+                     </xs:complexType>
+                  </xs:element>
+               </xs:sequence>
+               <xs:attribute name="getevidenceid" type="xn-bdt:UUID.URN" use="required">
+                  <xs:annotation>
+                     <xs:documentation>Identifikator der GetEvidence-Nachricht. Er muss der ID für die GetEvidence-Nachricht entsprechen, auf die diese Nachricht antwortet.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DE.GetEvidenceErrorResponse.0413">
+      <xs:annotation>
+         <xs:documentation>Fehlermeldung, weil die Nachricht GetEvidence nicht beantwortet werden kann. Genutzt von der nationalen Intermediären Plattform in Anwendungsfall 4 der NOOTS High-Level-Architecture.</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:complexContent>
+            <xs:extension base="xn-bk:Nachricht">
+               <xs:sequence>
+                  <xs:element name="status" type="xn-bdt:Code.ResponseStatusType">
+                     <xs:annotation>
+                        <xs:documentation>Status der Antwort.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="SpecificationIdentifier"
+                              fixed="urn:xoev-de:bva:standard:xnachweis_1.2.0"
+                              type="xs:string">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Version der Spezifikation.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceResponseIdentifier" type="xn-bdt:UUID">
+                     <xs:annotation>
+                        <xs:documentation>Identifikator für die Evidence Error Response.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="IssueDateTime" type="xs:dateTime">
+                     <xs:annotation>
+                        <xs:documentation>Ausstellungsdatum und -uhrzeit der Nachricht. Für die einwandfreie Nachverfolgbarkeit und gezielte Steuerung auf der Transportebene müssen alle Zeitstempel in einem UTC-Format inkl. Zeitzone gesetzt werden. Ein Beispiel des W3-Konsortiums für eine in UTC definierte Zeitangabe ist: 1994-11-05T13:15:30Z</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="ErrorProvider" type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, welche die Fehlernachricht ausstellt, mit ihrer Klassifikation im Element Classification.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="EvidenceRequester"
+                              maxOccurs="unbounded"
+                              type="xn-bk:AgentType_NOOTS">
+                     <xs:annotation>
+                        <xs:documentation>Die Stelle, die den Nachweis anfragt. Da die Verantwortung für Nachweisanfrage und Bearbeitung des Verfahrens, in dessen Kontext der Nachweis eingeholt wird, auf mehrere Stellen aufgeteilt werden kann, sind hier mehrere Einträge zulässig, die jedoch nach ihrem AgentType unterschieden werden müssen.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+                  <xs:element name="Exception"
+                              maxOccurs="unbounded"
+                              type="xn-bk:RegistryExceptionType">
+                     <xs:annotation>
+                        <xs:documentation>Beschreibt den Fehler beim Verarbeiten der Nachricht GetEvidence.</xs:documentation>
+                     </xs:annotation>
+                  </xs:element>
+               </xs:sequence>
+               <xs:attribute name="requestid" type="xn-bdt:UUID.URN" use="required">
+                  <xs:annotation>
+                     <xs:documentation>Der Identifikator der Nachricht GetEvidence. Muss dem Identifikator der Nachricht GetEvidence entsprechen, auf den diese Nachricht antwortet.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+            </xs:extension>
+         </xs:complexContent>
+      </xs:complexType>
+   </xs:element>
+</xs:schema>
