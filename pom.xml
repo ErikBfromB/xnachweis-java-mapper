@@ -39,7 +39,7 @@
                         <source>src/main/resources/xsd/1-2-0/xnachweis-de-noots.xsd</source>
                         <source>src/main/resources/xsd/1-2-0/xnachweis-eu-edm.xsd</source>
                     </sources>
-                    <outputDirectory>${basedir}/src/main/java</outputDirectory>
+                    <outputDirectory>${basedir}/target/generated-sources</outputDirectory>
                     <clearOutputDir>false</clearOutputDir>
                 </configuration>
             </plugin>
